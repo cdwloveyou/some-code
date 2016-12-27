@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>轮播</title>
+</head>
+<style>
+  {
+    margin:0;
+    padding:0;
+  }  
+  #carousel{
+    position:relative;
+    width:1600px;
+    height:900px;
+    overflow: hidden;
+  }
+  #imgsbox{
+    position:absolute;
+    width:6450px;
+    height:900px;
+  }
+  .img-box{
+    display:inline-block;
+    width:1600px;
+    
+  }
+  .img-box img{
+    width:100%;
+  }
+  #items span{
+    color:red;
+    font-size: 100px;
+  }
+  li{list-style: none;float:left}
+</style>
+<body>
+  <div id="carousel">
+    <div id="imgsbox" style="left:0">
+     <div class="img-box">
+      <img src="http://www.1tong.com/uploads/wallpaper/anime/244-1-1600x900.jpg">
+     </div>
+     <div class="img-box">
+      <img src="http://image.tianjimedia.com/uploadImages/2013/289/L5691SUVM650.jpg">
+     </div>
+     <div class="img-box">
+      <img src="http://a.hiphotos.baidu.com/zhidao/pic/item/d043ad4bd11373f0a2c096a7a60f4bfbfbed040e.jpg">
+     </div>
+      <div class="img-box">
+        <img src="http://attimg.dospy.com/img/day_130106/20130106_c430e7e9e73402a192628k4ENDRDpCnC.jpg">
+     </div>
+    </div>
+  </div>
+    <ul id="items">
+      <li><span>·</span></li>
+      <li><span>·</span></li>
+      <li><span>·</span></li>
+      <li><span>·</span></li>
+    </ul>
+    
+    <button type="button" id="prev-btn">上一张</button>
+    <button type="button" id="next-btn">下一张</button>
+  <script>
+    window.onload = function(){
+      var carousel = document.getElementById('carousel');
+      var imgbox = document.getElementById('imgbox');
+      var imgs = document.getElementsByTagName('img');
+      var lis = document.getElementById('items').getElementsByTagName('span');
+      var prev = document.getElementById('prev-btn');
+      var next = document.getElementById('next-btn');
+      var index;
+      
+      console.log(window.width);
+      
+      imgsbox.width = imgs.length * imgs[0].width;
+      
+      
+      
+      next.onclick =function(){
+        if(imgsbox.style.left =="-3200px"){
+          imgsbox.style.left = "0px";
+          return;
+        }
+        imgsbox.style.left = parseInt(imgsbox.style.left) - 1600 + "px";
+      }
+      
+      prev.onclick =function(){
+        if(imgsbox.style.left =="0px"){
+          imgsbox.style.left = "-3200px";
+          return;
+        }
+        imgsbox.style.left = parseInt(imgsbox.style.left) + 1600 + "px";
+      }
+      
+      
+      
+      console.log(imgsbox.width);
+      for(var i = 0 ;i<lis.length;i++){
+        (function(i){
+          lis[i].onclick = function(){
+            index = -i;
+            imgsbox.style.left = (index * 1600) + "px";
+            console.log(imgsbox.style.left);
+          }
+        })(i);
+      }
+    }
+  </script>
+</body>
+</html>
