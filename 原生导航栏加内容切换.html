@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>nav</title>
+  <style>
+    .navbar-list-item{
+      display: inline-block;
+      padding:5px 10px;
+      border:1px solid #ddd;
+      text-decoration: none;
+    }
+    .navbar-list-item.active{
+      background: red; 
+    }
+    .navbar-content-item{
+      display: none;
+    }
+    .navbar-content-item.active{
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div id="navbar-list">
+      <a href="#home" class="navbar-list-item active">home</a>
+      <a href="#game" class="navbar-list-item">game</a>
+      <a href="#user" class="navbar-list-item">user</a>
+    </div>
+    <div id="navbar-content">
+      <div id="home" class="navbar-content-item active">
+        this is home
+      </div>
+      <div id="game" class="navbar-content-item">
+        this is game<br/>
+        i am the second 
+      </div>
+      <div id="user" class="navbar-content-item">
+        <div>
+          this is user<br/>
+        this is third<br/>
+        this is admin<br/>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <script>
+    window.onload = function(){
+      var index = 0;
+      var lists = document.getElementById("navbar-list").getElementsByTagName("a");
+      var items = document.getElementById("navbar-content").getElementsByClassName("navbar-content-item");
+
+      //循环遍历每一个a，点击后消除active，然后this添加active
+      for(var i=0;i<lists.length;i++){
+          (function(i){
+            lists[i].onclick=function(){
+              for(var j=0;j<lists.length;j++){
+                lists[j].setAttribute("class","navbar-list-item");
+                items[j].setAttribute("class","navbar-content-item");
+              }
+              this.setAttribute("class","navbar-list-item active");
+              items[i].setAttribute("class","navbar-content-item active");
+            }
+          })(i);
+      }
+
+    }
+
+  </script>
+</body>
+</html>
