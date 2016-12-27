@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>日历</title>
+  <style>
+    .today{
+      color:red;
+    }
+  </style>
+</head>
+<body>
+  <div id="calendar">
+    <div id="nowBox"></div>
+    <div id="todayBox"></div>
+    <div id="calendarBox">
+      <table>
+        <thead>
+          <tr>
+            <th>日</th>
+            <th>一</th>
+            <th>二</th>
+            <th>三</th>
+            <th>四</th>
+            <th>五</th>
+            <th>六</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  <script>
+    window.onload=function(){
+      var nowBox = document.getElementById('nowBox');
+      var todayBox = document.getElementById('todayBox');
+      var tbody = document.getElementById('calendar').getElementsByTagName('tbody')[0];
+
+
+      var today = new Date();
+      var d = today.getDate();
+      var m = today.getMonth()+1;
+      var y = today.getFullYear();
+      var h  = today.getHours();
+      var mins = today.getMinutes();
+      var s = today.getSeconds();
+         
+      todayBox.innerHTML = addZero(y) + "年"+ addZero(m) +"月" +addZero(d)+ "日";
+      nowBox.innerHTML = addZero(h) +":"+ addZero(mins) +":"+addZero(s);
+
+        //为时间补0；
+      function addZero(v){
+        if(v<10){
+          return "0" + v;
+        }else{
+          return v;
+        }
+      }
+
+      //更新现在的时间
+      function updateNow(){
+        setInterval(function(){
+          today = new Date();
+          d = today.getDate();
+          m = today.getMonth()+1;
+          y = today.getFullYear();
+
+          h  = today.getHours();
+          mins = today.getMinutes();
+          s = today.getSeconds();
+         
+          todayBox.innerHTML = addZero(y) + "年"+ addZero(m) +"月" +addZero(d)+ "日";
+          nowBox.innerHTML = addZero(h) +":"+ addZero(mins) +":"+addZero(s);
+        },100);
+      }
+      
+
+      //显示这个月日历
+      function calendar(){
+        var nextMonthFirstday = new Date(y,m,1,0,0,0);
+        
+        var thisMonthDays = (new Date(nextMonthFirstday-1)).getDate();
+        var firstDay = (new Date(y,m-1,1,0,0,0)).getDay();
+        var cells=7,rows= Math.ceil((firstDay + thisMonthDays)/cells);
+        var text = 1;
+
+        for (var i = 0; i < rows; i++) {
+          var tr = document.createElement('tr');
+          for(var j = 0; j<cells;j++){
+            var td = document.createElement('td');
+            if(j<firstDay && text ==1){
+              console.log(text);
+              td.innerHTML = "";
+            }else{
+              td.innerHTML = text;
+              if (text == d) {
+                td.className = "today";
+              };
+              text++;
+            }
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        };
+      }
+
+
+
+
+      updateNow();
+      calendar();
+    }
+
+    
+  </script>
+</body>
+</html>
