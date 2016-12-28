@@ -14,6 +14,13 @@
     <div id="nowBox"></div>
     <div id="todayBox"></div>
     <div id="calendarBox">
+      <div>
+        <select id="selectYear"></select>
+        <select id="selectMonth"></select>
+        <button type="button" id="prev" >《《</button>
+        <button type="button" id="next" > 》》</button>
+        <button type="button" id="showtoday" >today</button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -32,12 +39,24 @@
       </table>
 
     </div>
+    <div>
+      <input type="text" id="selectedDate">
+    </div>
   </div>
   <script>
     window.onload=function(){
       var nowBox = document.getElementById('nowBox');
       var todayBox = document.getElementById('todayBox');
       var tbody = document.getElementById('calendar').getElementsByTagName('tbody')[0];
+      var selectedDate = document.getElementById('selectedDate');
+      var selectYear = document.getElementById('selectYear');
+      var selectMonth = document.getElementById('selectMonth');
+      var prevBtn = document.getElementById('prev');
+      var nextBtn = document.getElementById('next');
+      var todayBtn = document.getElementById('showtoday');
+      var selectedDate = document.getElementById('selectedDate');
+
+
 
 
       var today = new Date();
@@ -50,6 +69,29 @@
          
       todayBox.innerHTML = addZero(y) + "年"+ addZero(m) +"月" +addZero(d)+ "日";
       nowBox.innerHTML = addZero(h) +":"+ addZero(mins) +":"+addZero(s);
+
+
+      // 循环生成年选择框
+      for (var i = 1970; i < 2038; i++) {
+        var option = document.createElement('option');
+        option.value = i;
+        option.innerHTML=i;
+        if(i == y){
+          option.selected = true;
+        } 
+        selectYear.appendChild(option);
+      };
+
+      // 循环生成月选择框
+      for (var i = 1; i < 13; i++) {
+        var option = document.createElement('option');
+        option.value = i;
+        option.innerHTML=i;
+        if(i == m){
+          option.selected = true;
+        } 
+        selectMonth.appendChild(option);
+      };
 
         //为时间补0；
       function addZero(v){
@@ -78,28 +120,45 @@
       }
       
 
-      //显示这个月日历
-      function calendar(){
-        var nextMonthFirstday = new Date(y,m,1,0,0,0);
-        
-        var thisMonthDays = (new Date(nextMonthFirstday-1)).getDate();
-        var firstDay = (new Date(y,m-1,1,0,0,0)).getDay();
-        var cells=7,rows= Math.ceil((firstDay + thisMonthDays)/cells);
-        var text = 1;
+      // 两个选择框的值
+      function changeSelect(){
+          var selY = selectYear.value;
+          var selM = selectMonth.value;
+          tbody.innerHTML = "";
+          calendar(selY,selM);
+      }
 
+
+      //生成日历
+      function calendar(year,month){
+
+        // 下个月的第一天
+        var nextMonthFirstday = new Date(year,month,1,0,0,0);
+        //获取当前月的最后一天
+        var thisMonthDays = (new Date(nextMonthFirstday-1)).getDate();
+        //获取当前月的第一天是星期几
+        var firstDay = (new Date(year,month-1,1,0,0,0)).getDay();
+        //将列表分为几列和几行
+        var cells=7,rows= Math.ceil((firstDay + thisMonthDays)/cells);
+
+        var text = 1;
+        //循环生成相应的视图
         for (var i = 0; i < rows; i++) {
           var tr = document.createElement('tr');
           for(var j = 0; j<cells;j++){
             var td = document.createElement('td');
             if(j<firstDay && text ==1){
-              console.log(text);
               td.innerHTML = "";
-            }else{
+            }else if(text <= thisMonthDays){
               td.innerHTML = text;
-              if (text == d) {
+              if (text == d && year ==y && month == m) {
                 td.className = "today";
               };
               text++;
+            }
+            td.onclick = function(){
+              // alert("hello");
+              selectedDate.value = selectYear.value + "-" + selectMonth.value + "-" + this.innerHTML;
             }
             tr.appendChild(td);
           }
@@ -107,11 +166,52 @@
         };
       }
 
+      prevBtn.onclick = function(){
+        tbody.innerHTML = "";
+        todayBtn.disabled = "";
+        if(selectMonth.value == 1 ){
+          selectMonth.value = 12;
+          selectYear.value = selectYear.value-1;
+        }else{
+          selectMonth.value = selectMonth.value - 1;
+        }
+        calendar(selectYear.value,selectMonth.value);
+      }
 
+      nextBtn.onclick=function(){
+        tbody.innerHTML = "";
+        todayBtn.disabled = "";
+        if(selectMonth.value == 12 ){
+          selectMonth.value = 1;
+          selectYear.value = parseInt(selectYear.value) + 1;
+        }else{
+          selectMonth.value = parseInt(selectMonth.value) + 1;
+        }
+        calendar(selectYear.value,selectMonth.value);
+        
+      }
 
+      selectYear.onchange = function(){
+        changeSelect();
+        todayBtn.disabled = "";
+      }
 
+      selectMonth.onchange= function(){
+        changeSelect();
+        todayBtn.disabled = "";
+      }
+
+      todayBtn.onclick = function(){
+          tbody.innerHTML = "";
+          todayBtn.disabled = "disabled";
+          selectMonth.value = m; 
+          selectYear.value = y; 
+          calendar(y,m);
+      }
+
+      
       updateNow();
-      calendar();
+      calendar(y,m);
     }
 
     
