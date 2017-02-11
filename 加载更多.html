@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>加载更多</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+  <style>
+    body{
+      margin:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    
+  </div>
+  <div class="loadmore">
+    加载更多
+  </div>
+  
+  <script>
+  window.onload = function(){
+    var num = 15;
+    var box = document.querySelector('.box');
+    for(var i=0;i<num;i++){
+      var h2 = document.createElement('h2');
+      h2.innerHTML = 'hellowold';
+      box.appendChild(h2);
+    }
+
+     
+    var windowHeight = document.documentElement.clientHeight;
+    
+    window.addEventListener('scroll', function(){
+      var boxHeight = box.clientHeight;
+      var scrollTop = document.body.scrollTop;
+      var isLoad = boxHeight -windowHeight - scrollTop;
+      console.log(isLoad);
+      if(isLoad < 100){
+        for(var i=0;i<5;i++){
+          var h2 = document.createElement('h2');
+          h2.innerHTML = 'hellowold';
+          box.appendChild(h2);
+        }
+      }
+    }, false);
+  }
+    
+  </script>
+</body>
+</html>
